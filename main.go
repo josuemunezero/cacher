@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"net"
-	"io"
-	"os"
 	"log"
 )
 
@@ -22,17 +20,12 @@ func main() {
 	defer conn.Close()
 
 	for {
-		buf := make([]byte, 1024)
-
-		_, err := conn.Read(buf)
+		resp := newResp(conn)
+		v, err := resp.read()
 		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			fmt.Println("Error reading from client: " + err.Error())
-			os.Exit(1)
+			log.Fatal(err)
 		}
-
+		fmt.Printf("Data: %v", v)
 		conn.Write([]byte("+OK\r\n"))
 	}
 }

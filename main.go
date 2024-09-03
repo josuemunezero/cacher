@@ -25,8 +25,13 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("Data: %v", v)
-		conn.Write([]byte("+OK\r\n"))
+		v.typ = "string"
+		v.str = "OK"
+		w := NewWriter(conn)
+		_, e := w.write(v)
+		if e != nil {
+			log.Fatal(e)
+		}
 	}
 }
 

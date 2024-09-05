@@ -15,6 +15,12 @@ const (
 	ARRAY = '*'
 )
 
+const (
+	ARRAY_TEXT = "array"
+	STRING_TEXT = "string"
+	BULK_TEXT = "bulk"
+)
+
 type Value struct {
 	typ string
 	str string
@@ -51,7 +57,7 @@ func (r *Resp) read() (Value, error) {
 		case ARRAY :
 			return r.readArray()
 		default :
-			fmt.Printf("Invalid type", typ)
+			fmt.Printf("Invalid type: %v", typ)
 			return Value{}, nil
 	}
 }
@@ -87,7 +93,7 @@ func (r *Resp) readInteger() (int , error) {
 
 func (r *Resp) readBulk() (Value, error)  {
 	v := Value{}
-	v.typ = "BULK"
+	v.typ = BULK_TEXT
 	size, err := r.readInteger()
 	if err != nil {
 		return v, err
@@ -102,7 +108,7 @@ func (r *Resp) readBulk() (Value, error)  {
 
 func (r *Resp) readArray() (Value, error) {
 	v := Value{}
-	v.typ = "ARRAY" 
+	v.typ = ARRAY_TEXT
 	size, err := r.readInteger()
 	if err != nil {
 		return Value{}, err
@@ -121,11 +127,11 @@ func (r *Resp) readArray() (Value, error) {
 
 func (v Value) marshal() []byte {
 	switch v.typ {
-		case "string" :
+		case STRING_TEXT :
 			return v.marshalString()
-		case "bulk" :
+		case BULK_TEXT :
 			return v.marshalBulk()
-		case "array" :
+		case ARRAY_TEXT :
 			return v.marshalArray()
 		default :
 			return []byte{}

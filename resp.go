@@ -170,7 +170,6 @@ func (v Value) marshalArray() []byte {
 
 func (w *Writer) write(v Value) (string, error) {
 	data := v.marshal()
-	fmt.Printf("Marshalled data: %v ", data)
 	_, error := w.writer.Write(data)
 	if(error != nil) {
 		return "", error

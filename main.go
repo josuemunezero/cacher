@@ -10,6 +10,7 @@ import (
 func main() {
 	fmt.Println("Listening on port 6379")
 	l, err := net.Listen("tcp", ":6379")
+	initDb()
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -7,6 +7,8 @@ var handlers = map[string]func(v []Value) Value {
 	"set": set,
 	"get": get,
 	"del": del,
+	"hset": hset,
+	"hget": hget,
 }
 
 const (
@@ -37,6 +39,23 @@ func get(args []Value) Value {
 		key := args[0].bulk
 		val := fetchData(key)
 		response = val
+	}
+	return Value{typ:"string", str:response}
+}
+
+func hset(args []Value) Value {
+	response := fmt.Sprintf("HSET %s", INVALID_ARGUMENTS)
+	if len(args) == 3 {
+		putData(args[0].bulk, args[1].bulk, args[2].bulk)
+		response = "Data added successfully!"
+	}
+	return Value{typ:"string", str:response}
+}
+
+func hget(args []Value) Value {
+	response := fmt.Sprintf("HGET %s", INVALID_ARGUMENTS)
+	if len(args) == 2 {
+		response = fetchData(args[0].bulk, args[1].bulk)
 	}
 	return Value{typ:"string", str:response}
 }

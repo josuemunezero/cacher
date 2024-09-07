@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 
 var db map[string]string
 
@@ -17,4 +19,13 @@ func fetchData(key string) string {
 		return "Key not found!"
 	}
 	return val
+}
+
+func deleteData(key string) string {
+	val, exists := db[key]
+	if(exists) {
+		delete(db, key)
+		return fmt.Sprintf("{\"%s\": \"%s\"} has been deleted.", key, val)
+	}
+	return fmt.Sprintf("No Record with Key \"%s\" was found!", key)
 }

@@ -55,6 +55,16 @@ func fetchData(args... string) string {
 	return val
 }
 
+func fetchAll(args... string) string {
+	val := "Requested data could not be found!"
+	hDbMutex.Lock()
+	if v, ok := hDb[args[0]]; ok {
+		val = fmt.Sprintf("%v", v)
+	}
+	hDbMutex.Unlock()
+	return val
+}
+
 func deleteData(key string) string {
 	val, exists := db[key]
 	if(exists) {

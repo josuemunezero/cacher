@@ -9,6 +9,7 @@ var handlers = map[string]func(v []Value) Value {
 	"del": del,
 	"hset": hset,
 	"hget": hget,
+	"hgetall":hgetall,
 }
 
 const (
@@ -56,6 +57,14 @@ func hget(args []Value) Value {
 	response := fmt.Sprintf("HGET %s", INVALID_ARGUMENTS)
 	if len(args) == 2 {
 		response = fetchData(args[0].bulk, args[1].bulk)
+	}
+	return Value{typ:"string", str:response}
+}
+
+func hgetall(args []Value) Value {
+	response := fmt.Sprintf("HGETALL %s", INVALID_ARGUMENTS)
+	if len(args) == 1 {
+		response = fetchAll(args[0].bulk)
 	}
 	return Value{typ:"string", str:response}
 }

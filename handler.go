@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 var handlers = map[string]func(v []Value) Value {
 	"ping": ping,
@@ -62,11 +64,23 @@ func hget(args []Value) Value {
 }
 
 func hgetall(args []Value) Value {
-	response := fmt.Sprintf("HGETALL %s", INVALID_ARGUMENTS)
+	res := Value{typ:STRING_TEXT}
+
 	if len(args) == 1 {
-		response = fetchAll(args[0].bulk)
+		data := fetchAll(args[0].bulk)
+		mapStr := "{"
+		for k, v := range data {
+			mapStr = fmt.Sprintf("%v\"%v\":\"%v\",", mapStr, k, v)
+		}
+		if len(mapStr) > 1 {
+			mapStr = mapStr[:len(mapStr)-1]
+		}
+		mapStr += "}"
+		res.str = mapStr
+	} else {
+		res.str = fmt.Sprintf("HGETALL %s", INVALID_ARGUMENTS)
 	}
-	return Value{typ:"string", str:response}
+	return res
 }
 
 func del(args []Value) Value {

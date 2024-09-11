@@ -55,11 +55,11 @@ func fetchData(args... string) string {
 	return val
 }
 
-func fetchAll(args... string) string {
-	val := "Requested data could not be found!"
+func fetchAll(args... string) map[string]string {
+	val := make(map[string]string)
 	hDbMutex.Lock()
 	if v, ok := hDb[args[0]]; ok {
-		val = fmt.Sprintf("%v", v)
+		val = v
 	}
 	hDbMutex.Unlock()
 	return val

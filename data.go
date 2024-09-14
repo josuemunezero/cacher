@@ -65,11 +65,19 @@ func fetchAll(args... string) map[string]string {
 	return val
 }
 
-func deleteData(key string) string {
-	val, exists := db[key]
-	if(exists) {
-		delete(db, key)
-		return fmt.Sprintf("{\"%s\": \"%s\"} has been deleted.", key, val)
+func deleteData(keys []string) string {
+	res := "keys:"
+	for _, key := range keys {
+		_, exists := db[key]
+		if(exists) {
+			delete(db, key)
+			res = fmt.Sprintf("%s '%s', ", res, key)
+		}
 	}
-	return fmt.Sprintf("No Record with Key \"%s\" was found!", key)
+
+	if len(res) > 5 {
+		res = res[:len(res)-2]
+	}
+	res = fmt.Sprintf("%v have been deleted.", res)
+	return res
 }

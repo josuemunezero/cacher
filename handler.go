@@ -86,7 +86,11 @@ func hgetall(args []Value) Value {
 func del(args []Value) Value {
 	response := fmt.Sprintf("DEL %s", INVALID_ARGUMENTS)
 	if(len(args) > 0) {
-		response = deleteData(args[0].bulk)
+		keys := make([]string, 0)
+		for i := 0; i < len(args); i++ {
+			keys = append(keys, args[i].bulk)
+		}
+		response = deleteData(keys)
 	}
 	return Value{typ:"string", str:response}
 }
